@@ -1,0 +1,19 @@
+version: '3.4'
+services:
+            
+    laminas-blog-sql:
+        container_name: laminas-blog-sql
+        build:
+            context: .
+            dockerfile: Dockerfile-app
+        ports:
+            - "8080:80"
+        volumes:
+            - "../source/:/var/www/html/"
+            - "../../cache-composer/:/root/.composer/"
+        networks:
+            - laminas
+        
+networks:
+    laminas:
+        driver: bridge

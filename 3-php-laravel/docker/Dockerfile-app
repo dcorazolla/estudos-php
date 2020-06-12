@@ -1,0 +1,39 @@
+FROM php:7-apache
+MAINTAINER Diogo Corazolla <diogocorazolla@gmail.com>
+
+RUN apt-get update
+RUN apt-get install --no-install-recommends -y libxml2-dev \
+    libldb-dev libcurl3-dev libpng-dev libjpeg-dev libfreetype6-dev \
+    libzip-dev git zip unzip libpng-tools
+RUN apt-get install --no-install-recommends -y libonig-dev
+RUN docker-php-ext-install intl 
+RUN docker-php-ext-install zip 
+RUN docker-php-ext-install pdo_mysql 
+RUN docker-php-ext-install gd 
+RUN docker-php-ext-install bcmath 
+RUN docker-php-ext-install ctype 
+RUN docker-php-ext-install json 
+RUN docker-php-ext-install fileinfo 
+RUN docker-php-ext-install mbstring 
+RUN docker-php-ext-install pdo 
+RUN docker-php-ext-install xml 
+RUN docker-php-ext-install tokenizer 
+RUN a2enmod rewrite
+RUN sed -i 's!/var/www/html!/var/www/html/public\nSetEnv APPLICATION_ENV development!g' /etc/apache2/sites-available/000-default.conf
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+ENV PATH="/root/.composer/vendor/bin:${PATH}" 
+
+RUN apt-get install --no-install-recommends -y iputils-ping
+RUN apt-get install --no-install-recommends -y nodejs npm
+
+WORKDIR /var/www/html/
+#COPY composer.json ./
+
+#VOLUME /root/.composer/
+#RUN composer install --no-dev --no-interaction
+
+#RUN composer install -d /var/www/html/ --no-dev --no-interaction -o
+
+#RUN composer install --no-dev --no-interaction -o
+
